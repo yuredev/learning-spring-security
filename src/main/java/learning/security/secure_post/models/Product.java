@@ -16,6 +16,6 @@ public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "product_id_seq")
     private Integer id;
-    private String nome;
-    private Double preco;
+    private String name;
+    private Double price;
 }
