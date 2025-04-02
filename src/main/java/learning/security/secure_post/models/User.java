@@ -12,11 +12,11 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-@Getter
+@Data
 @RequiredArgsConstructor
 @Table(name = "_user")
 @Entity(name = "_user_")
@@ -29,8 +29,15 @@ public class User implements UserDetails {
     private String login;
     private String password;
 
+    public User(UserRole role, String login, String password) {
+        this.role = role;
+        this.login = login;
+        this.password = password;
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
+        // linkar o enum UserRole as suas equivalencias do Spring Security
         if (this.role == UserRole.ADMIN) {
             return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"), new SimpleGrantedAuthority("ROLE_USER"));
         }
