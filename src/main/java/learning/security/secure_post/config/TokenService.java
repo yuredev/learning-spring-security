@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
+import com.auth0.jwt.exceptions.JWTVerificationException;
 
 import learning.security.secure_post.models.User;
 
@@ -29,6 +30,15 @@ public class TokenService {
             return token;
         } catch (JWTCreationException e) {
             throw new RuntimeException("Erro ao gerar token", e);
+        }
+    }
+
+    public String validateToken(String token) {
+        try {
+            var algorithm = Algorithm.HMAC256(secret);
+            return JWT.require(algorithm).withIssuer("secure-post").build().verify(token).getSubject();
+        } catch (JWTVerificationException e) {
+            return "";
         }
     }
 

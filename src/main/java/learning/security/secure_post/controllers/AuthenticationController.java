@@ -3,6 +3,7 @@ package learning.security.secure_post.controllers;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import learning.security.secure_post.config.TokenService;
 import learning.security.secure_post.models.User;
 import learning.security.secure_post.models.dto.RegisterDTO;
 import learning.security.secure_post.models.dto.auth.AuthDTO;
@@ -25,12 +26,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 public class AuthenticationController {
     final private AuthenticationManager authenticationManager;
     final private UserRepository userRepository;
+    final private TokenService tokenService;
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody AuthDTO authDTO) {
         var authToken = new UsernamePasswordAuthenticationToken(authDTO.login(), authDTO.password());
         var auth = authenticationManager.authenticate(authToken);
-        return ResponseEntity.ok().body(new ResponseAuthDTO((User) auth.getPrincipal(), authToken.toString()));
+        var user = (User) auth.getPrincipal();
+        var token = tokenService.generateToken(user);
+        return ResponseEntity.ok(new ResponseAuthDTO(user, token));
     }
 
     @PostMapping("/register")

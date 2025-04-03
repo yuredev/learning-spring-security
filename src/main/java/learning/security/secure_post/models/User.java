@@ -21,6 +21,7 @@ import lombok.RequiredArgsConstructor;
 @Table(name = "_user")
 @Entity(name = "_user_")
 @EqualsAndHashCode
+// O Spring Security tem essa interface que vem com algumas propriedades comuns de usuários de aplicações
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
